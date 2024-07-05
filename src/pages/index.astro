@@ -1,16 +1,40 @@
 ---
+import Layout from "../components/Layout.astro";
+import { db, Comment } from "astro:db";
 
+if (Astro.request.method === "POST") {
+  const formData = await Astro.request.formData();
+  const authorId = formData.get("authorId");
+  const body = formData.get("body");
+  if (typeof authorId === "string" && typeof body === "string") {
+    await db.insert(Comment).values({
+      authorId: parseInt(authorId),
+      body,
+      likes: 5,
+    });
+  }
+  return Astro.redirect(Astro.url, 303);
+}
+
+const comments = await db.select().from(Comment);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout>
+  <h1>Comments</h1>
+  <form method="POST" style="display: grid">
+    <label for="authorId">authorId</label>
+    <input id="authorId" name="authorId" />
+    <label for="body">body</label>
+    <textarea id="body" name="body"></textarea>
+    <button type="submit">Submit</button>
+  </form>
+  {
+    comments.map(({ body, authorId, likes }) => (
+      <article>
+        <p>Author: {authorId}</p>
+        <p>{body}</p>
+        <p>{likes}</p>
+      </article>
+    ))
+  }
+</Layout>
