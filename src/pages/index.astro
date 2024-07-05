@@ -1,16 +1,17 @@
 ---
 import Layout from "../components/Layout.astro";
+import CommentForm from "../components/CommentForm.astro";
+import Avatar from "../components/Avatar.astro";
 import { db, Comment } from "astro:db";
 
 if (Astro.request.method === "POST") {
   const formData = await Astro.request.formData();
-  const authorId = formData.get("authorId");
   const body = formData.get("body");
-  if (typeof authorId === "string" && typeof body === "string") {
+  if (typeof body === "string") {
+    const authorId = Math.floor(Math.random() * 10) + 1;
     await db.insert(Comment).values({
-      authorId: parseInt(authorId),
+      authorId,
       body,
-      likes: 5,
     });
   }
   return Astro.redirect(Astro.url, 303);
@@ -20,21 +21,18 @@ const comments = await db.select().from(Comment);
 ---
 
 <Layout>
-  <h1>Comments</h1>
-  <form method="POST" style="display: grid">
-    <label for="authorId">authorId</label>
-    <input id="authorId" name="authorId" />
-    <label for="body">body</label>
-    <textarea id="body" name="body"></textarea>
-    <button type="submit">Submit</button>
-  </form>
-  {
-    comments.map(({ body, authorId, likes }) => (
-      <article>
-        <p>Author: {authorId}</p>
-        <p>{body}</p>
-        <p>{likes}</p>
-      </article>
-    ))
-  }
+  <main class="max-w-lg mx-auto my-20 p-4">
+    <CommentForm />
+    {
+      comments.map(({ body, authorId }) => (
+        <article class="flex gap-3 mb-6">
+          <Avatar />
+          <div class="flex-1">
+            <p class="font-medium">Dipankar Maikap {authorId}</p>
+            <p>{body}</p>
+          </div>
+        </article>
+      ))
+    }
+  </main>
 </Layout>
