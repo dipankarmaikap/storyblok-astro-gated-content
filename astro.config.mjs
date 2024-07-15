@@ -10,6 +10,11 @@ export default defineConfig({
     optimizeDeps: {
       exclude: ["@node-rs/argon2-wasm32-wasi"],
     },
+    build: {
+      rollupOptions: {
+        external: ["@node-rs/argon2-wasm32-wasi"],
+      },
+    },
   },
   output: "server",
   adapter: vercel(),
