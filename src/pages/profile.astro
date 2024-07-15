@@ -1,0 +1,42 @@
+---
+import { db } from "astro:db";
+import Layout from "../components/Layout.astro";
+import { User } from "astro:db";
+import { eq } from "astro:db";
+
+const user = Astro.locals.user;
+if (!user) {
+  return Astro.redirect("/signin");
+}
+
+if (Astro.request.method === "POST") {
+  const formData = await Astro.request.formData();
+  const name = formData.get("name");
+  if (typeof name === "string") {
+    await db
+      .update(User)
+      .set({
+        name,
+      })
+      .where(eq(User.id, user.id));
+  }
+  return Astro.redirect(Astro.url, 303);
+}
+---
+
+<Layout>
+  <main class="max-w-lg mx-auto my-20 p-4">
+    <h1 class="text-4xl font-bold mb-4">Profile</h1>
+    <form id="signup" method="post">
+      <label for="name">Name</label>
+      <input
+        class="outline-none ring-2 rounded flex w-full ring-gray-400 p-2 focus:ring-indigo-600"
+        name="name"
+        id="name"
+        value={user.name}
+      />
+      <br />
+      <button class="rounded-md bg-indigo-600 text-white p-2 px-8 w-full" type="submit">Update profile</button>
+    </form>
+  </main>
+</Layout>

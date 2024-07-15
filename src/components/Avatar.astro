@@ -1,9 +1,12 @@
 ---
-
+interface Props {
+  name: string;
+}
+const { name } = Astro.props;
 ---
 
 <span
-  class="inline-flex items-center justify-center size-[46px] rounded-full bg-blue-600 font-semibold text-white leading-none dark:bg-blue-500"
+  class="inline-flex uppercase items-center justify-center size-[46px] rounded-full bg-blue-600 font-semibold text-white leading-none dark:bg-blue-500"
 >
-  AC
+  {name.substring(0, 2)}
 </span>

@@ -1,33 +1,40 @@
 import { defineDb, defineTable, column, NOW } from "astro:db";
 
-const Comment = defineTable({
+export const Comment = defineTable({
   columns: {
-    authorId: column.number(),
+    id: column.text({
+      primaryKey: true,
+    }),
+    publishedAt: column.date({
+      default: NOW,
+    }),
     body: column.text(),
+    userId: column.text({
+      optional: false,
+      references: () => User.columns.id,
+    }),
   },
 });
-const User = defineTable({
+export const User = defineTable({
   columns: {
-    id: column.number({ primaryKey: true }),
+    id: column.text({ primaryKey: true }),
     username: column.text({
       unique: true,
     }),
-    password_hash: column.text(),
+    name: column.text({
+      optional: false,
+    }),
+    passwordHash: column.text(),
   },
 });
-const Session = defineTable({
+export const Session = defineTable({
   columns: {
-    id: column.number({ primaryKey: true }),
-    expires_at: column.date(),
-    user_id: column.number(),
-    authorId: column.number(),
+    id: column.text({ primaryKey: true }),
+    expiresAt: column.number(),
+    userId: column.text({
+      references: () => User.columns.id,
+    }),
   },
-  foreignKeys: [
-    {
-      columns: ["user_id"],
-      references: () => [User.columns.id],
-    },
-  ],
 });
 
 export default defineDb({
