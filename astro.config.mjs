@@ -11,4 +11,9 @@ export default defineConfig({
   security: {
     checkOrigin: true,
   },
+  vite: {
+    optimizeDeps: {
+      exclude: ["@node-rs/argon2-wasm32-wasi"],
+    },
+  },
 });
