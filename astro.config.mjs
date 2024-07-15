@@ -6,14 +6,14 @@ import tailwind from "@astrojs/tailwind";
 // https://astro.build/config
 export default defineConfig({
   integrations: [db(), tailwind()],
-  output: "server",
-  adapter: vercel(),
-  security: {
-    checkOrigin: true,
-  },
   vite: {
     optimizeDeps: {
       exclude: ["@node-rs/argon2-wasm32-wasi"],
     },
+  },
+  output: "server",
+  adapter: vercel(),
+  security: {
+    checkOrigin: true,
   },
 });

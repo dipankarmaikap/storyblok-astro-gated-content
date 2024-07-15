@@ -7,10 +7,7 @@ export async function POST(context: APIContext): Promise<Response> {
   const username = formData.get("username");
   //Basic username validation
   const invalidUsername =
-    typeof username !== "string" ||
-    username.length < 3 ||
-    username.length > 31 ||
-    !/^[a-z0-9_-]+$/.test(username);
+    typeof username !== "string" || username.length < 3 || username.length > 31 || !/^[a-z0-9_-]+$/.test(username);
 
   if (invalidUsername) {
     return throwError("Invalid username");
@@ -21,6 +18,8 @@ export async function POST(context: APIContext): Promise<Response> {
   if (typeof password !== "string" || password.length < 6 || password.length > 255) {
     return throwError("Invalid password");
   }
+
+  console.log({ username, password });
 
   //Check if user exist
 
