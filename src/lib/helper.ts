@@ -1,4 +1,4 @@
-import { hash, verify } from "@node-rs/argon2";
+import bcrypt from "bcrypt";
 import { generateId } from "lucia";
 import { lucia } from "./auth";
 import type { APIContext } from "astro";
@@ -7,18 +7,13 @@ export function DBuuid() {
   return generateId(15);
 }
 
-const hashParameter = {
-  memoryCost: 19456,
-  timeCost: 2,
-  outputLen: 32,
-  parallelism: 1,
-};
+const saltRounds = 10;
 
 export async function hashPassword(password: string) {
-  return await hash(password, hashParameter);
+  return await bcrypt.hash(password, saltRounds);
 }
 export async function validatePassword(hashPassword: string, password: string) {
-  return await verify(hashPassword, password, hashParameter);
+  return await bcrypt.compare(password, hashPassword);
 }
 
 export async function createSession(userId: string, context: APIContext) {

@@ -10,7 +10,6 @@ export const Comment = defineTable({
     }),
     body: column.text(),
     userId: column.text({
-      optional: false,
       references: () => User.columns.id,
     }),
   },
@@ -21,9 +20,7 @@ export const User = defineTable({
     username: column.text({
       unique: true,
     }),
-    name: column.text({
-      optional: false,
-    }),
+    name: column.text(),
     passwordHash: column.text(),
   },
 });
