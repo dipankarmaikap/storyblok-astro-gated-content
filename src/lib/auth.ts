@@ -1,18 +1,13 @@
 import { Lucia } from "lucia";
-import { db } from "astro:db";
+import { db, Session, User } from "astro:db";
 import { DrizzleSQLiteAdapter } from "@lucia-auth/adapter-drizzle";
-import { Session, User } from "db/config";
-import { asDrizzleTable } from "@astrojs/db/utils";
 
-const sessionTable: any = asDrizzleTable("Session", Session);
-const userTable = asDrizzleTable("User", User);
-
-const adapter = new DrizzleSQLiteAdapter(db as any, sessionTable, userTable);
+const adapter = new DrizzleSQLiteAdapter(db as any, Session, User);
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
     attributes: {
-      secure: Boolean((process.env || import.meta.env).PROD),
+      secure: true,
     },
   },
   getUserAttributes: (attributes) => {

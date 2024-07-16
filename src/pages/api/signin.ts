@@ -19,8 +19,6 @@ export async function POST(context: APIContext): Promise<Response> {
     return throwError("Invalid password");
   }
 
-  console.log({ username, password });
-
   //Check if user exist
 
   const existingUsers = await db.select().from(User).where(eq(User.username, username)).limit(1);

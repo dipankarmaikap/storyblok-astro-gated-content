@@ -1,6 +1,6 @@
 import { defineDb, defineTable, column, NOW } from "astro:db";
 
-export const Comment = defineTable({
+const Comment = defineTable({
   columns: {
     id: column.text({
       primaryKey: true,
@@ -14,7 +14,7 @@ export const Comment = defineTable({
     }),
   },
 });
-export const User = defineTable({
+const User = defineTable({
   columns: {
     id: column.text({ primaryKey: true }),
     username: column.text({
@@ -24,16 +24,14 @@ export const User = defineTable({
     passwordHash: column.text(),
   },
 });
-export const Session = defineTable({
+
+const Session = defineTable({
   columns: {
-    id: column.text({ primaryKey: true }),
-    expiresAt: column.number(),
-    userId: column.text({
-      references: () => User.columns.id,
-    }),
+    id: column.text(),
+    expiresAt: column.number({ optional: false }),
+    userId: column.text({ optional: false, references: () => User.columns.id }),
   },
 });
-
 export default defineDb({
   tables: { Comment, User, Session },
 });

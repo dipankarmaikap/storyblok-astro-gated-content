@@ -14,10 +14,7 @@ export async function POST(context: APIContext): Promise<Response> {
   const username = formData.get("username");
   //Basic username validation
   const invalidUsername =
-    typeof username !== "string" ||
-    username.length < 3 ||
-    username.length > 31 ||
-    !/^[a-z0-9_-]+$/.test(username);
+    typeof username !== "string" || username.length < 3 || username.length > 31 || !/^[a-z0-9_-]+$/.test(username);
 
   if (invalidUsername) {
     return throwError("Invalid username");
@@ -42,7 +39,6 @@ export async function POST(context: APIContext): Promise<Response> {
     await createSession(userId, context);
     return new Response();
   } catch (e) {
-    console.log(e);
     return throwError("An unknown error occurred", 500);
   }
 }
