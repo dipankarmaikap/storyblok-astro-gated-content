@@ -8,7 +8,7 @@ export default defineConfig({
   integrations: [db(), tailwind()],
   vite: {
     optimizeDeps: {
-      exclude: ["@node-rs/argon2-wasm32-wasi"],
+      exclude: ["@node-rs/argon2"],
     },
   },
   output: "server",
