@@ -1,6 +1,6 @@
 import { verifyRequestOrigin } from "lucia";
 import { defineMiddleware } from "astro:middleware";
-import { lucia } from "./lib/auth";
+import { lucia } from "~/lib/auth";
 
 export const onRequest = defineMiddleware(async (context, next) => {
   if (context.request.method !== "GET") {
@@ -13,8 +13,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
 
-  const sessionId = context.cookies.get("auth_session")?.value ?? null;
-  console.log({ sessionId });
+  const sessionId = context.cookies.get(lucia.sessionCookieName)?.value ?? null;
+  console.log({ lucia });
 
   if (!sessionId) {
     context.locals.user = null;
