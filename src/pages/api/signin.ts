@@ -36,5 +36,9 @@ export async function POST(context: APIContext): Promise<Response> {
 
   await createSession(existingUser.id, context);
 
-  return new Response();
+  return new Response(
+    JSON.stringify({
+      sucess: true,
+    })
+  );
 }

@@ -35,6 +35,7 @@ export function throwError(message: string, status: number = 400) {
   return new Response(
     JSON.stringify({
       error: message,
+      sucess: false,
     }),
     {
       status,
