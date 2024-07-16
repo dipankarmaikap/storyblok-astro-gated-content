@@ -27,10 +27,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
     context.cookies.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
   }
 
-  //there seems toa bug as the session.fresh always shows false by default, this fixies that
-  const isSessionFresh = session.expiresAt.getTime() > new Date().getTime();
-  session.fresh = isSessionFresh;
-
   if (session && session.fresh) {
     const sessionCookie = lucia.createSessionCookie(session.id);
     context.cookies.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
