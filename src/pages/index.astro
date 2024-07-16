@@ -1,29 +1,10 @@
 ---
 import Layout from "../components/Layout.astro";
-import CommentForm from "../components/CommentForm.astro";
 import Avatar from "../components/Avatar.astro";
 import { db, Comment } from "astro:db";
-import { DBuuid } from "~/lib/helper";
 import { User } from "astro:db";
 import { eq } from "astro:db";
 
-const user = Astro.locals.user;
-// if (!user) {
-//   return Astro.redirect("/signin");
-// }
-
-if (Astro.request.method === "POST") {
-  const formData = await Astro.request.formData();
-  const body = formData.get("body");
-  if (typeof body === "string") {
-    await db.insert(Comment).values({
-      id: DBuuid(),
-      userId: user.id,
-      body,
-    });
-  }
-  return Astro.redirect(Astro.url, 303);
-}
 const comments = await db
   .select({
     id: Comment.id,
@@ -38,7 +19,6 @@ const comments = await db
 <Layout>
   <main class="max-w-lg mx-auto my-20 p-4">
     <h1 class="text-center font-bold text-2xl mb-8">This is a private article</h1>
-    <CommentForm />
     {
       comments.map(({ body, name }) => (
         <article class="flex gap-3 mb-6">
