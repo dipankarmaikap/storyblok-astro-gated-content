@@ -21,14 +21,18 @@ export async function validatePassword(hashPassword: string, password: string) {
 }
 
 export async function createSession(userId: string, context: APIContext) {
-  const oneHourFromNow = new Date();
-  oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);
-  const session = await lucia.createSession(userId, {
-    expiresAt: oneHourFromNow,
-    userId,
-  });
-  const sessionCookie = lucia.createSessionCookie(session.id);
-  context.cookies.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+  try {
+    const oneHourFromNow = new Date();
+    oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);
+    const session = await lucia.createSession(userId, {
+      expiresAt: oneHourFromNow,
+      userId,
+    });
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    context.cookies.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export function throwError(message: string, status: number = 400) {

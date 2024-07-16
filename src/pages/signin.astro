@@ -46,10 +46,11 @@ if (Astro.locals.user) {
         body: new FormData(formElement),
       });
       const data = await response.json();
-      if (data.sucess) {
-        window.location.href = "/";
-      } else {
-        errorMessageElement.innerText = data.error;
-      }
+      console.log(data);
+      // if (data.sucess) {
+      //   window.location.href = "/";
+      // } else {
+      //   errorMessageElement.innerText = data.error;
+      // }
     });
 </script>
