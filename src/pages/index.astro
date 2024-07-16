@@ -8,9 +8,9 @@ import { User } from "astro:db";
 import { eq } from "astro:db";
 
 const user = Astro.locals.user;
-if (!user) {
-  return Astro.redirect("/signin");
-}
+// if (!user) {
+//   return Astro.redirect("/signin");
+// }
 
 if (Astro.request.method === "POST") {
   const formData = await Astro.request.formData();
@@ -42,7 +42,7 @@ const comments = await db
     {
       comments.map(({ body, name }) => (
         <article class="flex gap-3 mb-6">
-          <Avatar name={name || "Unknown name"} />
+          <Avatar name={name} />
           <div class="flex-1">
             <p class="font-medium">{name}</p>
             <p>{body}</p>

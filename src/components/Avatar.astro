@@ -1,8 +1,8 @@
 ---
 interface Props {
-  name: string;
+  name?: string;
 }
-const { name } = Astro.props;
+const { name = "Unknown name" } = Astro.props;
 ---
 
 <span

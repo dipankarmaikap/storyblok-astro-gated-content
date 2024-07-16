@@ -4,7 +4,7 @@ const user = Astro.locals.user;
 ---
 
 <form method="POST" class="flex gap-3">
-  <Avatar name={user?.name || ""} />
+  <Avatar name={user?.name} />
   <div class="flex flex-col flex-1">
     <label for="body" class="block sr-only text-sm font-medium leading-6 text-gray-900">Write your comment</label>
     <textarea
