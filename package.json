@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@astrojs/db": "^0.11.7",
+    "@astrojs/netlify": "^5.4.0",
     "@astrojs/tailwind": "^5.1.0",
     "@astrojs/vercel": "^7.7.2",
     "@lucia-auth/adapter-drizzle": "^1.0.7",
@@ -21,9 +22,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.7.0",
-    "typescript": "^5.5.3"
-  },
-  "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.18.1"
+    "typescript": "^5.5.3",
+    "vite-env-only": "^3.0.3"
   }
 }
