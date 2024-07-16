@@ -1,6 +1,6 @@
 import db from "@astrojs/db";
 import { defineConfig } from "astro/config";
-import vercel from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/netlify";
 import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
