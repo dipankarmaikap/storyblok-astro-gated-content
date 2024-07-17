@@ -25,7 +25,7 @@ export async function createSession(userId: string, context: APIContext) {
     const oneHourFromNow = new Date();
     oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);
     const session = await lucia.createSession(userId, {
-      expiresAt: oneHourFromNow,
+      expiresAt: oneHourFromNow.getTime(),
       userId,
     });
     const sessionCookie = lucia.createSessionCookie(session.id);

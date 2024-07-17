@@ -1,7 +1,7 @@
-import db from "@astrojs/db";
 import { defineConfig } from "astro/config";
-import vercel from "@astrojs/vercel/serverless";
+import db from "@astrojs/db";
 import tailwind from "@astrojs/tailwind";
+import vercel from "@astrojs/vercel/serverless";
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,9 +12,7 @@ export default defineConfig({
     },
   },
   output: "server",
-  adapter: vercel({
-    edgeMiddleware: true,
-  }),
+  adapter: vercel(),
   security: {
     checkOrigin: true,
   },

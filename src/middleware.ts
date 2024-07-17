@@ -13,6 +13,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
   const sessionId = context.cookies.get(lucia.sessionCookieName)?.value ?? null;
+  console.log({
+    sessionId,
+    validSession: await lucia.validateSession(sessionId),
+  });
+  return next();
+
   if (!sessionId) {
     context.locals.user = null;
     context.locals.session = null;

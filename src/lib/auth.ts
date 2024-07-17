@@ -30,6 +30,6 @@ interface DatabaseUserAttributes {
   name: string;
 }
 interface DatabaseSessionAttributes {
-  expiresAt: Date;
+  expiresAt: number;
   userId: string;
 }
