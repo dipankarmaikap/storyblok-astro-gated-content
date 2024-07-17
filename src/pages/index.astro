@@ -1,34 +1,32 @@
 ---
-import Layout from "../components/Layout.astro";
-import Avatar from "../components/Avatar.astro";
-import { db, Comment } from "astro:db";
-import { User } from "astro:db";
-import { eq } from "astro:db";
+import Layout from "~/components/Layout.astro";
+import { useStoryblokApi } from "@storyblok/astro";
 
-const comments = await db
-  .select({
-    id: Comment.id,
-    publishedAt: Comment.publishedAt,
-    body: Comment.body,
-    name: User.name,
-  })
-  .from(Comment)
-  .leftJoin(User, eq(Comment.userId, User.id));
+const storyblokApi = useStoryblokApi();
+const articles = await storyblokApi.getAll("cdn/stories", {
+  version: "draft",
+  starts_with: "articles",
+  excluding_fields: "body",
+});
 ---
 
 <Layout>
-  <main class="max-w-lg mx-auto my-20 p-4">
-    <h1 class="text-center font-bold text-2xl mb-8">This is a private article</h1>
-    {
-      comments.map(({ body, name }) => (
-        <article class="flex gap-3 mb-6">
-          <Avatar name={name} />
-          <div class="flex-1">
-            <p class="font-medium">{name}</p>
-            <p>{body}</p>
-          </div>
-        </article>
-      ))
-    }
+  <main class="max-w-lg mx-auto my-10 p-4">
+    <h1 class="font-bold text-6xl mb-12">Articles</h1>
+    <div class="flex flex-col gap-8">
+      {
+        articles.map((article) => (
+          <article>
+            <span class="bg-gray-800 text-white rounded p-1">
+              {article.content.private ? "Private 🔒" : "Public 🌐"}
+            </span>
+            <a href={"/" + article.full_slug}>
+              <h2 class="text-3xl font-bold my-2 hover:underline hover:text-indigo-600">{article.content.title}</h2>
+            </a>
+            <p>{article.content.excerpt}</p>
+          </article>
+        ))
+      }
+    </div>
   </main>
 </Layout>

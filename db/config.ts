@@ -12,6 +12,7 @@ const Comment = defineTable({
     userId: column.text({
       references: () => User.columns.id,
     }),
+    articleId: column.text(),
   },
 });
 const User = defineTable({

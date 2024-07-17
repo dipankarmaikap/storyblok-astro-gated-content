@@ -3,7 +3,9 @@ import { defineMiddleware } from "astro:middleware";
 import { lucia } from "~/lib/auth";
 
 export const onRequest = defineMiddleware(async (context, next) => {
-  if (context.request.method !== "GET") {
+  const isLocal = import.meta.env.RUNNING_LOCALLY === "yes";
+
+  if (context.request.method !== "GET" && !isLocal) {
     const originHeader = context.request.headers.get("Origin");
     const hostHeader = context.request.headers.get("Host");
     if (!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader])) {
@@ -26,9 +28,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     context.cookies.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
   }
 
-  if (session) {
-    const isSessionFresh = session.expiresAt.getTime() > new Date().getTime();
-    session.fresh = isSessionFresh;
+  if (session && session.fresh) {
     const sessionCookie = lucia.createSessionCookie(session.id);
     context.cookies.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
   }
