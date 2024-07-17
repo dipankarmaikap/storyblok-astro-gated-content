@@ -1,13 +1,11 @@
 ---
 import Layout from "~/components/Layout.astro";
-import { useStoryblok } from "@storyblok/astro";
-import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
 import Avatar from "~/components/Avatar.astro";
 import CommentForm from "~/components/CommentForm.astro";
-import { db, Comment } from "astro:db";
-import { User } from "astro:db";
-import { eq } from "astro:db";
+import { useStoryblok } from "@storyblok/astro";
 import { DBuuid } from "~/lib/helper";
+import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
+import { db, Comment, User, eq } from "astro:db";
 
 const { slug } = Astro.params;
 

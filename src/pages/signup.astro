@@ -1,5 +1,5 @@
 ---
-import Layout from "../components/Layout.astro";
+import Layout from "~/components/Layout.astro";
 if (Astro.locals.user) {
   return Astro.redirect("/");
 }
@@ -38,23 +38,7 @@ if (Astro.locals.user) {
   </main>
 </Layout>
 <script>
-  const errorMessageElement = document.getElementById("form-error")!;
-  const signUpForm = document.getElementById("signup");
+  import { handelFormSubmit } from "~/utils";
 
-  signUpForm &&
-    signUpForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      errorMessageElement.innerText = "";
-      const formElement = e.target as HTMLFormElement;
-      const response = await fetch(formElement.action, {
-        method: formElement.method,
-        body: new FormData(formElement),
-      });
-      const data = await response.json();
-      if (data.sucess) {
-        window.location.href = "/";
-      } else {
-        errorMessageElement.innerText = data.error;
-      }
-    });
+  handelFormSubmit("signup");
 </script>
