@@ -46,3 +46,11 @@ export function throwError(message: string, status: number = 400) {
     }
   );
 }
+
+export function isValidUsername(username: string): boolean {
+  return typeof username === "string" && /^[a-z0-9_-]{3,31}$/.test(username);
+}
+
+export function isValidPassword(password: string): boolean {
+  return typeof password === "string" && password.length >= 6 && password.length <= 255;
+}

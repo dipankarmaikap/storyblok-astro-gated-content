@@ -11,4 +11,9 @@ const renderedRichText = renderRichText(blok.body);
   </span>
   <h1 class="font-bold text-6xl mb-12">{blok.title}</h1>
   <div set:html={renderedRichText} />
+  <!-- This is only for any copyright violations, not relavent for the users -->
+  <div class="bg-[#add8e6] text-[#00008b] p-2 rounded-sm mt-4">
+    This article text is generated using artificial intelligence and is not based on real events or information. It
+    serves as dummy content for demonstration purposes only.
+  </div>
 </main>

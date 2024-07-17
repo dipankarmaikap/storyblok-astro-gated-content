@@ -1,29 +1,28 @@
 import type { APIContext } from "astro";
-import { db, User } from "astro:db";
-import { createSession, DBuuid, hashPassword, throwError } from "~/lib/helper";
+import { db, eq, User } from "astro:db";
+import { createSession, DBuuid, hashPassword, isValidPassword, isValidUsername, throwError } from "~/lib/helper";
 
 export async function POST(context: APIContext): Promise<Response> {
   const formData = await context.request.formData();
   const name = formData.get("name");
 
   //name validation
-  if (typeof name !== "string" || name.length < 1) {
+  if (typeof name !== "string" || name.length < 3) {
     return throwError("Invalid name");
   }
 
-  const username = formData.get("username");
-  //Basic username validation
-  const invalidUsername =
-    typeof username !== "string" || username.length < 3 || username.length > 31 || !/^[a-z0-9_-]+$/.test(username);
+  const username = formData.get("username") as string;
+  const password = formData.get("password") as string;
 
-  if (invalidUsername) {
-    return throwError("Invalid username");
+  // Basic validation
+  if (!isValidUsername(username) || !isValidPassword(password)) {
+    return throwError("Invalid username or password");
   }
 
-  //Basic password validation
-  const password = formData.get("password");
-  if (typeof password !== "string" || password.length < 6 || password.length > 255) {
-    return throwError("Invalid password");
+  //Check if already have account then return error.
+  const [existingUser] = await db.select().from(User).where(eq(User.username, username));
+  if (existingUser) {
+    return throwError("Already have an account. Please login.");
   }
 
   const passwordHash = await hashPassword(password);
@@ -37,7 +36,11 @@ export async function POST(context: APIContext): Promise<Response> {
       passwordHash,
     });
     await createSession(userId, context);
-    return new Response();
+    return new Response(
+      JSON.stringify({
+        sucess: true,
+      })
+    );
   } catch (e) {
     return throwError("An unknown error occurred", 500);
   }

@@ -28,16 +28,12 @@ if (Astro.locals.user) {
         name="password"
         id="password"
       /><br />
-      <button class="rounded-md bg-indigo-600 text-white p-2 px-8 w-full" type="submit"
-        >Create account</button
-      >
+      <button class="rounded-md bg-indigo-600 text-white p-2 px-8 w-full" type="submit">Create account</button>
       <p id="form-error"></p>
     </form>
     <p>
       Already have an account?
-      <a class="mt-4 text-center underline inline-flex hover:text-indigo-600" href="/signin"
-        >Signin</a
-      >
+      <a class="mt-4 text-center underline inline-flex hover:text-indigo-600" href="/signin">Signin</a>
     </p>
   </main>
 </Layout>
@@ -54,10 +50,11 @@ if (Astro.locals.user) {
         method: formElement.method,
         body: new FormData(formElement),
       });
-      if (response.ok) {
+      const data = await response.json();
+      if (data.sucess) {
         window.location.href = "/";
       } else {
-        errorMessageElement.innerText = (await response.json()).error;
+        errorMessageElement.innerText = data.error;
       }
     });
 </script>
