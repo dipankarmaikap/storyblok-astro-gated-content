@@ -7,6 +7,7 @@ import CommentForm from "~/components/CommentForm.astro";
 import { db, Comment } from "astro:db";
 import { User } from "astro:db";
 import { eq } from "astro:db";
+import { DBuuid } from "~/lib/helper";
 
 const { slug } = Astro.params;
 
@@ -19,10 +20,9 @@ const story = await useStoryblok(
   Astro,
 );
 const user = Astro.locals.user;
-// if (story.content.private && !user) {
-//   return Astro.redirect("/signin");
-// }
-
+if (story.content.private && !user) {
+  return Astro.redirect("/signin");
+}
 const comments = await db
   .select({
     id: Comment.id,
@@ -33,6 +33,24 @@ const comments = await db
   .from(Comment)
   .where(eq(Comment.articleId, story.uuid))
   .leftJoin(User, eq(Comment.userId, User.id));
+
+//Create new Comment
+
+if (Astro.request.method === "POST") {
+  // parse form data
+  const formData = await Astro.request.formData();
+  const body = formData.get("body");
+  if (typeof body === "string" && user) {
+    // insert form data into the Comment table
+    await db.insert(Comment).values({
+      articleId: story.uuid,
+      body,
+      userId: user.id,
+      id: DBuuid(),
+    });
+    return Astro.redirect(Astro.url, 303);
+  }
+}
 ---
 
 <Layout title={story.content.title}>
