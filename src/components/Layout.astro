@@ -17,3 +17,13 @@ import Footer from "./Footer.astro";
     <Footer />
   </body>
 </html>
+<script>
+  document.querySelectorAll("form").forEach((form) => {
+    const errorField = document.getElementById("form-error");
+    form.addEventListener("submit", () => {
+      if (errorField) {
+        errorField.innerText = "";
+      }
+    });
+  });
+</script>

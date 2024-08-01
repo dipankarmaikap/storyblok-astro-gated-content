@@ -1,0 +1,18 @@
+---
+import { actions } from "astro:actions";
+import Input from "~/components/ui/Input.astro";
+import Button from "~/components/ui/Button.astro";
+---
+
+<form id="signup-form" method="POST" action={actions.signup}>
+  <label for="name">Name</label>
+  <Input name="name" />
+  <br />
+  <label for="username">Username</label>
+  <Input name="username" />
+  <br />
+  <label for="password">Password</label>
+  <Input name="password" />
+  <br />
+  <Button name="Create account" type="submit" />
+</form>

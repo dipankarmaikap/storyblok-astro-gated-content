@@ -27,16 +27,17 @@ export default defineConfig({
       },
     }),
   ],
+  experimental: {
+    actions: true,
+  },
   vite: {
-    optimizeDeps: {
-      exclude: ["@node-rs/argon2-wasm32-wasi"],
+    // optimizeDeps: {
+    //   exclude: ["@node-rs/argon2-wasm32-wasi"],
+    // },
+    server: {
+      https: isLocal,
     },
-    ...(isLocal && {
-      server: {
-        https: true,
-      },
-      plugins: [mkcert()],
-    }),
+    plugins: [...(isLocal ? [mkcert()] : [])],
   },
   output: "server",
   adapter: vercel(),

@@ -14,12 +14,14 @@ if (Astro.locals.user) {
         class="outline-none ring-2 rounded flex w-full ring-gray-400 p-2 focus:ring-indigo-600"
         name="name"
         id="name"
+        required
       /><br />
       <label for="username">Username</label>
       <input
         class="outline-none ring-2 rounded flex w-full ring-gray-400 p-2 focus:ring-indigo-600"
         name="username"
         id="username"
+        required
       /><br />
       <label for="password">Password</label>
       <input
@@ -27,6 +29,7 @@ if (Astro.locals.user) {
         type="password"
         name="password"
         id="password"
+        required
       /><br />
       <button class="rounded-md bg-indigo-600 text-white p-2 px-8 w-full" type="submit">Create account</button>
       <p id="form-error" class="text-red-600 mt-2"></p>

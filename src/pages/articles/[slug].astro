@@ -8,14 +8,13 @@ import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
 import { db, Comment, User, eq } from "astro:db";
 
 const { slug } = Astro.params;
-
 const story = await useStoryblok(
-  `cdn/stories/${slug}`,
+  `cdn/stories/articles/${slug}`,
   {
     version: "draft",
   },
   {},
-  Astro,
+  Astro
 );
 const user = Astro.locals.user;
 if (story.content.private && !user) {

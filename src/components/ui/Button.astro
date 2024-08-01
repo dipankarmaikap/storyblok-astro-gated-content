@@ -1,0 +1,10 @@
+---
+interface Props extends Partial<HTMLButtonElement> {
+  name?: string;
+}
+const { name, type = "button" } = Astro.props;
+---
+
+<button name={name} class="rounded-md bg-indigo-600 text-white p-2 px-8 w-full" type={type}>
+  {name || <slot />}
+</button>

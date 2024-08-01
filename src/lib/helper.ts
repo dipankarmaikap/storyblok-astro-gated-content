@@ -2,6 +2,7 @@ import { hash, verify } from "@node-rs/argon2";
 import { generateId } from "lucia";
 import { lucia } from "./auth";
 import type { APIContext } from "astro";
+import type { ActionAPIContext } from "astro/actions/runtime/store.js";
 
 export function DBuuid() {
   return generateId(15);
@@ -20,7 +21,7 @@ export async function validatePassword(hashPassword: string, password: string) {
   return await verify(hashPassword, password, hashParameter);
 }
 
-export async function createSession(userId: string, context: APIContext) {
+export async function createSession(userId: string, context: APIContext | ActionAPIContext) {
   try {
     const oneHourFromNow = new Date();
     oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);

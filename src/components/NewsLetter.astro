@@ -1,0 +1,13 @@
+---
+import { actions } from "astro:actions";
+---
+
+<form id="newslatter-form" method="post" action={actions.newsletter}>
+  <label for="email">Email</label>
+  <input value="dip@g.com" name="email" type="email" id="email" />
+
+  <label for="receivePromo">Receive promotional emails</label>
+  <input name="receivePromo" type="checkbox" id="receivePromo" checked />
+
+  <button type="submit">Sign Up</button>
+</form>
