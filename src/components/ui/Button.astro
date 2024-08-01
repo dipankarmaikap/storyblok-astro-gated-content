@@ -2,9 +2,14 @@
 interface Props extends Partial<HTMLButtonElement> {
   name?: string;
 }
-const { name, type = "button" } = Astro.props;
+const { name, id, type = "button" } = Astro.props;
 ---
 
-<button name={name} class="rounded-md bg-indigo-600 text-white p-2 px-8 w-full" type={type}>
+<button
+  id={id}
+  name={name}
+  class="rounded-md bg-indigo-600 text-white p-2 px-8 w-full disabled:cursor-not-allowed disabled:bg-gray-600"
+  type={type}
+>
   {name || <slot />}
 </button>

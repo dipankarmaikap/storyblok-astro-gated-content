@@ -1,8 +1,6 @@
 ---
 import Layout from "~/components/Layout.astro";
-import NewsLetter from "~/components/NewsLetter.astro";
 import { useStoryblokApi } from "@storyblok/astro";
-import { actions } from "astro:actions";
 
 const storyblokApi = useStoryblokApi();
 const articles = await storyblokApi.getAll("cdn/stories", {
@@ -10,12 +8,9 @@ const articles = await storyblokApi.getAll("cdn/stories", {
   starts_with: "articles",
   excluding_fields: "body",
 });
-const comment = Astro.getActionResult(actions.newsletter);
-console.log(comment);
 ---
 
 <Layout>
-  <NewsLetter />
   <main class="max-w-lg mx-auto my-10 p-4">
     <h1 class="font-bold text-6xl mb-12">Articles</h1>
     <div class="flex flex-col gap-8">

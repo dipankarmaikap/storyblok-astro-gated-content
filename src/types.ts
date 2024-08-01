@@ -21,3 +21,4 @@ export type InputType =
   | "time"
   | "url"
   | "week";
+export type FormErrorType = Record<string, string>;

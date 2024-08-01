@@ -18,7 +18,7 @@ const Comment = defineTable({
 const User = defineTable({
   columns: {
     id: column.text({ primaryKey: true }),
-    username: column.text({
+    email: column.text({
       unique: true,
     }),
     name: column.text(),

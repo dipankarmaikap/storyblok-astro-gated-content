@@ -7,8 +7,8 @@ export default async function () {
     .values({
       id: DBuuid(),
       name: "Dipankar Maikap",
-      passwordHash: await hashPassword("123456"),
-      username: "dipankar",
+      passwordHash: await hashPassword("12345678"),
+      email: "mail@dipankarmaikap.com",
     })
     .returning();
 

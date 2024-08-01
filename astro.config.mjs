@@ -22,6 +22,7 @@ export default defineConfig({
       accessToken: STORYBLOK_ACESS_TOKEN,
       livePreview: isPreview,
       enableFallbackComponent: isPreview,
+      bridge: false,
       components: {
         article: "storyblok/Article",
       },
