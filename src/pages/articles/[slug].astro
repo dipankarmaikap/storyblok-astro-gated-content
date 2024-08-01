@@ -6,17 +6,6 @@ import { useStoryblok } from "@storyblok/astro";
 import { DBuuid } from "~/lib/helper";
 import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
 import { db, Comment, User, eq } from "astro:db";
-import { cacheHeader } from "pretty-cache-header";
-
-Astro.response.headers.set(
-  "Cache-Control",
-  cacheHeader({
-    public: true,
-    maxAge: "15m",
-    sMaxage: "1h",
-    staleWhileRevalidate: "2h",
-  })
-);
 
 const { slug } = Astro.params;
 const story = await useStoryblok(
