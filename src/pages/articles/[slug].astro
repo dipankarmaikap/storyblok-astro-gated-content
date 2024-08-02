@@ -1,7 +1,8 @@
 ---
 import Layout from "~/components/Layout.astro";
-import Avatar from "~/components/Avatar.astro";
+import TestCom from "~/components/TestCom.astro";
 import CommentForm from "~/components/CommentForm.astro";
+import Comments from "~/components/Comments.astro";
 import { useStoryblok } from "@storyblok/astro";
 import { DBuuid } from "~/lib/helper";
 import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
@@ -23,13 +24,16 @@ if (story.content.private && !user) {
 const comments = await db
   .select({
     id: Comment.id,
-    publishedAt: Comment.publishedAt,
+    createdAt: Comment.createdAt,
+    updatedAt: Comment.updatedAt,
+    parentId: Comment.parentId,
     body: Comment.body,
     name: User.name,
   })
   .from(Comment)
   .where(eq(Comment.articleId, story.uuid))
   .leftJoin(User, eq(Comment.userId, User.id));
+console.log({ comments });
 
 //Create new Comment
 
@@ -52,10 +56,12 @@ if (Astro.request.method === "POST") {
 
 <Layout title={story.content.title}>
   <StoryblokComponent blok={story.content} />
-  <div class="max-w-lg mx-auto px-4">
+  <div x-data class="max-w-lg mx-auto px-4">
     {
       user ? (
-        <CommentForm />
+          <div  :class="$store.commentState.open ?'': 'hidden'">
+            <CommentForm />
+          </div>
       ) : (
         <p class="font-bold text-xl">
           You have to{" "}
@@ -67,16 +73,19 @@ if (Astro.request.method === "POST") {
       )
     }
     <h4 class="text-2xl font-bold my-6">Comments[{comments.length}]</h4>
-    {
-      comments.map(({ body, name }) => (
-        <article class="flex gap-3 mb-6">
-          <Avatar name={name} />
-          <div class="flex-1">
-            <p class="font-medium">{name}</p>
-            <p>{body}</p>
-          </div>
-        </article>
-      ))
-    }
+    <Comments comments={comments} />
   </div>
 </Layout>
+<script is:inline>
+  document.addEventListener("alpine:init", () => {
+    window.Alpine.store("commentState", {
+      open: true,
+      toggle() {
+              this.open = !this.open;
+          },
+      disable() {
+              this.open = false;
+          }
+    });
+  });
+</script>

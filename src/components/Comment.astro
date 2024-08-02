@@ -1,0 +1,57 @@
+---
+import type { SingleComment } from "~/types";
+import Avatar from "~/components/Avatar.astro";
+import CommentForm from "~/components/CommentForm.astro";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  comments?: SingleComment[];
+  comment: SingleComment;
+  isFirst?: boolean;
+}
+const { comments, comment, isFirst } = Astro.props;
+const children = comments.filter((child) => child.parentId === comment.id);
+---
+
+<article class:list={["comment", { "pt-6": !isFirst }]}>
+  <div class="comment-content">
+    <header class="flex justify-between items-center mb-2">
+      <div class="flex items-center">
+        <p class="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
+          <Avatar name={comment.name} />{comment.name}
+        </p>
+        <p class="text-sm text-gray-600">
+          <time datetime="2022-02-08" title="February 8th, 2022">Feb. 8, 2022</time>
+        </p>
+      </div>
+      <button
+        id="dropdownComment1Button"
+        class="inline-flex items-center p-2 font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-blue-200"
+        type="button"
+      >
+        <Icon class="text-lg" name="ellipsis" />
+        <span class="sr-only">Comment settings</span>
+      </button>
+    </header>
+    <p class="text-gray-600">{comment.body}</p>
+    <div class="reply-comment" x-data="{ open: false }">
+      <button x-on:click="open = ! open" class="flex items-center text-gray-600 hover:underline font-medium mt-1">
+        <Icon name="message" />
+        <span class="ml-1 text-sm">Reply</span>
+      </button>
+      <!-- <button @click="$store.commentState.toggle()">Increment</button> -->
+      <div x-show="open" class="mt-2"><CommentForm /></div>
+    </div>
+  </div>
+  {
+    children.length > 0 && (
+      <ol class="comment-replies ml-6">
+        {children.map((child) => (
+          <li>
+            <Astro.self comment={child} comments={comments} />
+          </li>
+        ))}
+      </ol>
+    )
+  }
+</article>

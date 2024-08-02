@@ -1,0 +1,13 @@
+---
+import type { SingleComment } from "~/types";
+import Comment from "./Comment.astro";
+interface Props {
+  comments?: SingleComment[];
+}
+const { comments } = Astro.props;
+const topLevelComments = comments.filter((comment) => !comment.parentId);
+---
+
+<section class="comments flex flex-col gap-6 divide-y">
+  {topLevelComments.map((comment, index) => <Comment isFirst={index === 0} comment={comment} comments={comments} />)}
+</section>

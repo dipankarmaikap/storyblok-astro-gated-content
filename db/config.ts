@@ -1,16 +1,23 @@
-import { defineDb, defineTable, column, NOW } from "astro:db";
+import { defineDb, defineTable, column, NOW, sql } from "astro:db";
 
 const Comment = defineTable({
   columns: {
     id: column.text({
       primaryKey: true,
     }),
-    publishedAt: column.date({
+    createdAt: column.date({
       default: NOW,
+    }),
+    updatedAt: column.date({
+      default: sql`(CURRENT_TIMESTAMP)`,
     }),
     body: column.text(),
     userId: column.text({
       references: () => User.columns.id,
+    }),
+    parentId: column.text({
+      references: () => Comment.columns.id,
+      optional: true,
     }),
     articleId: column.text(),
   },

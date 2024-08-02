@@ -11,13 +11,28 @@ export default async function () {
       email: "mail@dipankarmaikap.com",
     })
     .returning();
-
+  const commentOneID = DBuuid();
+  const commentChildID = DBuuid();
   await db.insert(Comment).values([
     {
-      id: DBuuid(),
+      id: commentOneID,
       userId: user.id,
       articleId: "05fb03e8-5703-496f-8696-8bfbd350f476",
       body: "Great read on Storyblok's gated content capabilities! The flexibility it offers for managing and distributing premium content is a game-changer. The integration with Astro makes it even more powerful for developers.",
+    },
+    {
+      id: commentChildID,
+      userId: user.id,
+      parentId: commentOneID,
+      articleId: "05fb03e8-5703-496f-8696-8bfbd350f476",
+      body: "Great read on Storyblok's gated content capabilities!",
+    },
+    {
+      id: DBuuid(),
+      userId: user.id,
+      parentId: commentChildID,
+      articleId: "05fb03e8-5703-496f-8696-8bfbd350f476",
+      body: "The flexibility it offers for managing and distributing premium content is a game-changer.",
     },
     {
       id: DBuuid(),

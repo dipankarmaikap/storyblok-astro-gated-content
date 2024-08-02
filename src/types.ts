@@ -22,3 +22,11 @@ export type InputType =
   | "url"
   | "week";
 export type FormErrorType = Record<string, string>;
+export type SingleComment = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  parentId?: string;
+  body: string;
+  name: string;
+};

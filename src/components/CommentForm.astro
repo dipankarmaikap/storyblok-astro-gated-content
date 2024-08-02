@@ -1,10 +1,8 @@
 ---
-import Avatar from "./Avatar.astro";
-const user = Astro.locals.user;
+import Button from "./ui/Button.astro";
 ---
 
-<form method="POST" class="flex gap-3">
-  <Avatar name={user?.name} />
+<form hx-post="/api/comment" hx-swap="outerHTML" class="flex gap-3">
   <div class="flex flex-col flex-1">
     <label for="body" class="block sr-only text-sm font-medium leading-6 text-gray-900">Write your comment</label>
     <textarea
@@ -13,7 +11,12 @@ const user = Astro.locals.user;
       rows="3"
       class="outline-none ring-2 rounded flex w-full ring-gray-400 p-2 focus:ring-indigo-600 mb-4"></textarea>
     <div class="flex justify-end">
-      <button type="submit" class="rounded-md bg-indigo-600 text-white px-4 py-1 inline-block">Save</button>
+      <button
+        class="rounded-md inline-block p-1.5 px-2 bg-blue-600 hover:bg-blue-500 text-white disabled:cursor-not-allowed disabled:bg-gray-600"
+        type="submit"
+      >
+        Post comment
+      </button>
     </div>
   </div>
 </form>
