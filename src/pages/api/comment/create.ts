@@ -23,10 +23,7 @@ export async function POST(context: APIContext): Promise<Response> {
   const data = Object.fromEntries(formData);
   try {
     const { articleId, parentId, body } = CommentSchema.parse(data);
-
     const parentID = parentId || null;
-    console.log({ parentId: parentId || null });
-
     const [comment] = await db
       .insert(Comment)
       .values({
@@ -42,6 +39,7 @@ export async function POST(context: APIContext): Promise<Response> {
         comment: { ...comment, name: user.name },
         articleId,
         nested: parentID ? true : false,
+        haveUser: true,
       },
     });
     return new Response(result, {
@@ -50,8 +48,6 @@ export async function POST(context: APIContext): Promise<Response> {
       },
     });
   } catch (error) {
-    console.log(error);
-
     if (error instanceof z.ZodError) {
       const result = `<p class="text-red-600 mt-2 form-error">Input Error</p>`;
       return new Response(result, {

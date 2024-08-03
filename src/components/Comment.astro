@@ -12,12 +12,12 @@ interface Props {
   isFirst?: boolean;
   articleId: string;
   nested?: boolean;
+  haveUser?: boolean;
 }
-const { comments, comment, isFirst, articleId, nested } = Astro.props;
+const { comments, comment, isFirst, articleId, nested, haveUser } = Astro.props;
 const children = comments?.filter((child) => child.parentId === comment.id);
 const formattedDate = dayjs(comment.createdAt).format("MMM. D, YYYY");
-const user = Astro.locals.user;
-console.log({ user });
+const user = Astro.locals.user || haveUser;
 ---
 
 <article id={comment.id} class:list={["comment", { "pt-6": !isFirst, "ml-6": nested }]}>
