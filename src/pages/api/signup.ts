@@ -1,5 +1,5 @@
 import type { APIContext } from "astro";
-import { db, eq, User } from "astro:db";
+import { db, eq, Password, User } from "astro:db";
 import { container, createSession, DBuuid, hashPassword, parseZodError } from "~/lib/helper";
 import { z } from "astro/zod";
 import SignupForm from "~/components/forms/SignupForm.astro";
@@ -35,7 +35,10 @@ export async function POST(context: APIContext): Promise<Response> {
       id: userId,
       name,
       email,
-      passwordHash,
+    });
+    await db.insert(Password).values({
+      id: userId,
+      hash: passwordHash,
     });
     await createSession(userId, context);
     return new Response(null, {

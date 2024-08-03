@@ -29,7 +29,15 @@ const User = defineTable({
       unique: true,
     }),
     name: column.text(),
-    passwordHash: column.text(),
+    role: column.text({
+      default: "subscriber",
+    }),
+  },
+});
+const Password = defineTable({
+  columns: {
+    id: column.text({ primaryKey: true, optional: false, references: () => User.columns.id }),
+    hash: column.text(),
   },
 });
 
@@ -41,5 +49,5 @@ const Session = defineTable({
   },
 });
 export default defineDb({
-  tables: { Comment, User, Session },
+  tables: { Comment, User, Session, Password },
 });

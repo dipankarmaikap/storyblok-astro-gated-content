@@ -1,5 +1,5 @@
 import type { APIContext } from "astro";
-import { db, eq, User } from "astro:db";
+import { db, eq, Password, User } from "astro:db";
 import { container, createSession, parseZodError, validatePassword } from "~/lib/helper";
 import SigninForm from "~/components/forms/SigninForm.astro";
 import { z } from "astro/zod";
@@ -16,12 +16,20 @@ export async function POST(context: APIContext): Promise<Response> {
 
     const [existingUser] = await db.select().from(User).where(eq(User.email, email));
 
-    if (!existingUser || !(await validatePassword(existingUser.passwordHash, password))) {
-      const result = await container.renderToString(SigninForm, {
-        props: {
-          errors: { custom: "Incorrect email or password" },
+    const result = await container.renderToString(SigninForm, {
+      props: {
+        errors: { custom: "Incorrect email or password" },
+      },
+    });
+    if (!existingUser) {
+      return new Response(result, {
+        headers: {
+          "Content-Type": "text/html",
         },
       });
+    }
+    const [userPassword] = await db.select().from(Password).where(eq(Password.id, existingUser.id));
+    if (!(await validatePassword(userPassword.hash, password))) {
       return new Response(result, {
         headers: {
           "Content-Type": "text/html",
