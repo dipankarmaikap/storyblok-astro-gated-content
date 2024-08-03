@@ -1,0 +1,12 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<p class={className}>
+  You have to{" "}
+  <a href="/signin" class="underline text-blue-600"> signin </a>{" "}
+  if you want to comment.
+</p>

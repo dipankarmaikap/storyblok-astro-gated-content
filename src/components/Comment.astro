@@ -2,7 +2,9 @@
 import type { SingleComment } from "~/types";
 import Avatar from "~/components/Avatar.astro";
 import CommentForm from "~/components/CommentForm.astro";
+import PleaseLogin from "~/components/PleaseLogin.astro";
 import { Icon } from "astro-icon/components";
+import dayjs from "dayjs";
 
 interface Props {
   comments?: SingleComment[];
@@ -13,6 +15,9 @@ interface Props {
 }
 const { comments, comment, isFirst, articleId, nested } = Astro.props;
 const children = comments?.filter((child) => child.parentId === comment.id);
+const formattedDate = dayjs(comment.createdAt).format("MMM. D, YYYY");
+const user = Astro.locals.user;
+console.log({ user });
 ---
 
 <article id={comment.id} class:list={["comment", { "pt-6": !isFirst, "ml-6": nested }]}>
@@ -23,7 +28,7 @@ const children = comments?.filter((child) => child.parentId === comment.id);
           <Avatar name={comment.name} />{comment.name}
         </p>
         <p class="text-sm text-gray-600">
-          <time datetime="2022-02-08" title="February 8th, 2022">Feb. 8, 2022</time>
+          <time datetime={new Date(comment.createdAt).toISOString()} title={formattedDate}>{formattedDate}</time>
         </p>
       </div>
       <button
@@ -42,7 +47,9 @@ const children = comments?.filter((child) => child.parentId === comment.id);
         <span class="ml-1 text-sm">Reply</span>
       </button>
       <!-- <button @click="$store.commentState.toggle()">Increment</button> -->
-      <div x-show="open" x-cloak class="mt-2"><CommentForm parentId={comment.id} articleId={articleId} /></div>
+      <div x-show="open" x-cloak class="mt-2">
+        {user ? <CommentForm parentId={comment.id} articleId={articleId} /> : <PleaseLogin />}
+      </div>
     </div>
     <div class="comment-target"></div>
   </div>

@@ -30,18 +30,25 @@ const { parentId, articleId } = Astro.props;
 <script>
   window.htmx?.on("htmx:beforeRequest", (event) => {
     const form = event.target;
-    const submitButton = form.querySelector(".submit-button") as HTMLButtonElement;
-    document.querySelectorAll(".form-error").forEach((element) => {
-      element.remove();
-    });
-    submitButton.disabled = true;
-    submitButton.innerText = "Submitting...";
+    const hasCommentTargetClass = event.target.classList.contains("comment-target");
+    if (hasCommentTargetClass) {
+      const submitButton = form.querySelector(".submit-button") as HTMLButtonElement;
+      document.querySelectorAll(".form-error").forEach((element) => {
+        element.remove();
+      });
+      submitButton.disabled = true;
+      submitButton.innerText = "Submitting...";
+    }
   });
   window.htmx?.on("htmx:afterRequest", (event) => {
     const form = event.target;
-    form.reset();
-    const submitButton = form.querySelector(".submit-button") as HTMLButtonElement;
-    submitButton.disabled = false;
-    submitButton.innerText = "Post comment";
+    const hasCommentTargetClass = event.target.classList.contains("comment-target");
+
+    if (hasCommentTargetClass) {
+      form.reset();
+      const submitButton = form.querySelector(".submit-button") as HTMLButtonElement;
+      submitButton.disabled = false;
+      submitButton.innerText = "Post comment";
+    }
   });
 </script>

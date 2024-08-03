@@ -1,6 +1,7 @@
 ---
 import Layout from "~/components/Layout.astro";
 import Comments from "~/components/Comments.astro";
+import PleaseLogin from "~/components/PleaseLogin.astro";
 import { useStoryblok } from "@storyblok/astro";
 import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
 import { db, Comment, User, eq, desc } from "astro:db";
@@ -37,17 +38,7 @@ const comments = await db
 <Layout title={story.content.title}>
   <StoryblokComponent blok={story.content} />
   <div class="max-w-lg mx-auto px-4">
-    {
-      !user && (
-        <p class="font-bold text-xl">
-          You have to{" "}
-          <a href="/signin" class="underline text-blue-600">
-            signin
-          </a>{" "}
-          if you want to comment.
-        </p>
-      )
-    }
+    {!user && <PleaseLogin class="font-bold text-xl" />}
     <h4 class="text-2xl font-bold my-6">Comments[{comments.length}]</h4>
     <Comments articleId={story.uuid} comments={comments} />
   </div>
