@@ -42,7 +42,7 @@ const children = comments?.filter((child) => child.parentId === comment.id);
         <span class="ml-1 text-sm">Reply</span>
       </button>
       <!-- <button @click="$store.commentState.toggle()">Increment</button> -->
-      <div x-show="open" class="mt-2"><CommentForm parentId={comment.id} articleId={articleId} /></div>
+      <div x-show="open" x-cloak class="mt-2"><CommentForm parentId={comment.id} articleId={articleId} /></div>
     </div>
     <div class="comment-target"></div>
   </div>

@@ -5,7 +5,7 @@ import { DBuuid, container } from "~/lib/helper";
 import CommentUi from "~/components/Comment.astro";
 const CommentSchema = z.object({
   articleId: z.string().min(1),
-  parentId: z.string(),
+  parentId: z.string().nullable(),
   body: z.string(),
 });
 export async function POST(context: APIContext): Promise<Response> {
@@ -23,18 +23,26 @@ export async function POST(context: APIContext): Promise<Response> {
   const data = Object.fromEntries(formData);
   try {
     const { articleId, parentId, body } = CommentSchema.parse(data);
+
+    const parentID = parentId || null;
+    console.log({ parentId: parentId || null });
+
     const [comment] = await db
       .insert(Comment)
       .values({
         id: DBuuid(),
         articleId,
         body,
-        parentId,
+        parentId: parentID,
         userId: user.id,
       })
       .returning();
     const result = await container.renderToString(CommentUi, {
-      props: { comment: { ...comment, name: user.name }, articleId, nested: true },
+      props: {
+        comment: { ...comment, name: user.name },
+        articleId,
+        nested: parentID ? true : false,
+      },
     });
     return new Response(result, {
       headers: {
