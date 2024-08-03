@@ -15,6 +15,7 @@ const story = await useStoryblok(
   Astro
 );
 const user = Astro.locals.user;
+
 if (story.content.private && !user) {
   return Astro.redirect("/signin");
 }
