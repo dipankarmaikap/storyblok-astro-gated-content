@@ -3,11 +3,16 @@ import type { SingleComment } from "~/types";
 import Comment from "./Comment.astro";
 interface Props {
   comments?: SingleComment[];
+  articleId: string;
 }
-const { comments } = Astro.props;
+const { comments, articleId } = Astro.props;
 const topLevelComments = comments.filter((comment) => !comment.parentId);
 ---
 
 <section class="comments flex flex-col gap-6 divide-y">
-  {topLevelComments.map((comment, index) => <Comment isFirst={index === 0} comment={comment} comments={comments} />)}
+  {
+    topLevelComments.map((comment, index) => (
+      <Comment articleId={articleId} isFirst={index === 0} comment={comment} comments={comments} />
+    ))
+  }
 </section>

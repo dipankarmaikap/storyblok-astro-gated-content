@@ -11,5 +11,5 @@ declare namespace App {
 }
 interface Window {
   htmx: any; // or you can use a more specific type if available
-  Alpine: any;
+  Alpine: import("alpinejs").Alpine;
 }

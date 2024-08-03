@@ -27,12 +27,16 @@ const customError = errors["custom"];
   {customError && <p class="text-red-600 mt-2 form-error">{customError}</p>}
 </form>
 <script>
-  window.htmx?.on("htmx:beforeRequest", () => {
-    const submitButton = document.getElementById("signup-submit-button") as HTMLButtonElement;
+  window.htmx?.on("htmx:beforeRequest", (event) => {
+    const form = event.target;
+
+    const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
     document.querySelectorAll(".form-error").forEach((element) => {
       element.remove();
     });
-    submitButton.disabled = true;
-    submitButton.innerText = "Submitting...";
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.innerText = "Submitting...";
+    }
   });
 </script>

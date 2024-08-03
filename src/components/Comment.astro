@@ -8,12 +8,14 @@ interface Props {
   comments?: SingleComment[];
   comment: SingleComment;
   isFirst?: boolean;
+  articleId: string;
+  nested?: boolean;
 }
-const { comments, comment, isFirst } = Astro.props;
-const children = comments.filter((child) => child.parentId === comment.id);
+const { comments, comment, isFirst, articleId, nested } = Astro.props;
+const children = comments?.filter((child) => child.parentId === comment.id);
 ---
 
-<article class:list={["comment", { "pt-6": !isFirst }]}>
+<article id={comment.id} class:list={["comment", { "pt-6": !isFirst, "ml-6": nested }]}>
   <div class="comment-content">
     <header class="flex justify-between items-center mb-2">
       <div class="flex items-center">
@@ -40,15 +42,16 @@ const children = comments.filter((child) => child.parentId === comment.id);
         <span class="ml-1 text-sm">Reply</span>
       </button>
       <!-- <button @click="$store.commentState.toggle()">Increment</button> -->
-      <div x-show="open" class="mt-2"><CommentForm /></div>
+      <div x-show="open" class="mt-2"><CommentForm parentId={comment.id} articleId={articleId} /></div>
     </div>
+    <div class="comment-target"></div>
   </div>
   {
-    children.length > 0 && (
+    children && children.length > 0 && (
       <ol class="comment-replies ml-6">
         {children.map((child) => (
           <li>
-            <Astro.self comment={child} comments={comments} />
+            <Astro.self comment={child} articleId={articleId} comments={comments} />
           </li>
         ))}
       </ol>

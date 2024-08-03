@@ -42,13 +42,13 @@ const comments = await db.select().from(Comment).where(eq(Comment.userId, user.i
       <label for="name">Name</label>
       <input type="hidden" name="form-name" value="update-name" />
       <input
-        class="outline-none ring-2 rounded flex w-full ring-gray-400 p-2 focus:ring-indigo-600"
+        class="outline-none ring-2 rounded flex w-full ring-gray-400 p-2 focus:ring-blue-600"
         name="name"
         id="name"
         value={user.name}
       />
       <br />
-      <button class="rounded-md bg-indigo-600 text-white p-2 px-8 w-full" type="submit">Update profile</button>
+      <button class="rounded-md bg-blue-600 text-white p-2 px-8 w-full" type="submit">Update profile</button>
     </form>
     <div class="comments">
       <p class="text-2xl font-bold my-6">All Comments[{comments.length}]</p>

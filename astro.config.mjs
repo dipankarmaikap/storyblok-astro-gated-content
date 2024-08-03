@@ -6,6 +6,7 @@ import { loadEnv } from "vite";
 import mkcert from "vite-plugin-mkcert";
 import storyblok from "@storyblok/astro";
 import icon from "astro-icon";
+import alpinejs from "@astrojs/alpinejs";
 const {
   RUNNING_LOCALLY,
   STORYBLOK_ACESS_TOKEN,
@@ -13,6 +14,7 @@ const {
 } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 const isLocal = RUNNING_LOCALLY === "yes";
 const isPreview = STORYBLOK_IS_PREVIEW === "yes";
+
 
 // https://astro.build/config
 export default defineConfig({
@@ -24,7 +26,7 @@ export default defineConfig({
     components: {
       article: "storyblok/Article"
     }
-  }), icon()],
+  }), icon(), alpinejs()],
   experimental: {
     actions: true
   },

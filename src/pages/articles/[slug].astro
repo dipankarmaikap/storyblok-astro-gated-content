@@ -1,12 +1,11 @@
 ---
 import Layout from "~/components/Layout.astro";
-import TestCom from "~/components/TestCom.astro";
 import CommentForm from "~/components/CommentForm.astro";
 import Comments from "~/components/Comments.astro";
 import { useStoryblok } from "@storyblok/astro";
 import { DBuuid } from "~/lib/helper";
 import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
-import { db, Comment, User, eq } from "astro:db";
+import { db, Comment, User, eq, desc } from "astro:db";
 
 const { slug } = Astro.params;
 const story = await useStoryblok(
@@ -32,9 +31,7 @@ const comments = await db
   })
   .from(Comment)
   .where(eq(Comment.articleId, story.uuid))
-  .leftJoin(User, eq(Comment.userId, User.id));
-console.log({ comments });
-
+  .leftJoin(User, eq(Comment.userId, User.id)).orderBy(desc(Comment.createdAt));
 //Create new Comment
 
 if (Astro.request.method === "POST") {
@@ -59,13 +56,13 @@ if (Astro.request.method === "POST") {
   <div x-data class="max-w-lg mx-auto px-4">
     {
       user ? (
-          <div  :class="$store.commentState.open ?'': 'hidden'">
-            <CommentForm />
+          <div  :class={`$store.commentState.open ?'': 'hidden'`} >
+            {/* <CommentForm /> */}
           </div>
       ) : (
         <p class="font-bold text-xl">
           You have to{" "}
-          <a href="/signin" class="underline text-indigo-600">
+          <a href="/signin" class="underline text-blue-600">
             signin
           </a>{" "}
           if you want to comment.
@@ -73,12 +70,12 @@ if (Astro.request.method === "POST") {
       )
     }
     <h4 class="text-2xl font-bold my-6">Comments[{comments.length}]</h4>
-    <Comments comments={comments} />
+    <Comments articleId={story.uuid} comments={comments} />
   </div>
 </Layout>
 <script is:inline>
   document.addEventListener("alpine:init", () => {
-    window.Alpine.store("commentState", {
+    Alpine.store("commentState", {
       open: true,
       toggle() {
               this.open = !this.open;
