@@ -21,7 +21,7 @@ const articles = await storyblokApi.getAll("cdn/stories", {
               {article.content.private ? "Private 🔒" : "Public 🌐"}
             </span>
             <a href={"/" + article.full_slug}>
-              <h2 class="text-3xl font-bold my-2 hover:underline hover:text-blue-600">{article.content.title}</h2>
+              <h2 class="text-3xl font-bold my-2 hover:underline hover:text-indigo-600">{article.content.title}</h2>
             </a>
             <p>{article.content.excerpt}</p>
           </article>

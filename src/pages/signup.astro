@@ -1,8 +1,5 @@
 ---
-import SignupForm from "~/components/forms/SignupForm.astro";
 import Layout from "~/components/Layout.astro";
-
-//If user is presect redirect them to home if tries
 if (Astro.locals.user) {
   return Astro.redirect("/");
 }
@@ -11,10 +8,37 @@ if (Astro.locals.user) {
 <Layout>
   <main class="max-w-lg mx-auto my-20 p-4">
     <h1 class="text-4xl font-bold mb-4">Sign up</h1>
-    <SignupForm />
+    <form id="signup" method="post" action="/api/signup">
+      <label for="name">Name</label>
+      <input
+        class="outline-none ring-2 rounded flex w-full ring-gray-400 p-2 focus:ring-indigo-600"
+        name="name"
+        id="name"
+      /><br />
+      <label for="username">Username</label>
+      <input
+        class="outline-none ring-2 rounded flex w-full ring-gray-400 p-2 focus:ring-indigo-600"
+        name="username"
+        id="username"
+      /><br />
+      <label for="password">Password</label>
+      <input
+        class="outline-none ring-2 rounded flex w-full ring-gray-400 p-2 focus:ring-indigo-600"
+        type="password"
+        name="password"
+        id="password"
+      /><br />
+      <button class="rounded-md bg-indigo-600 text-white p-2 px-8 w-full" type="submit">Create account</button>
+      <p id="form-error" class="text-red-600 mt-2"></p>
+    </form>
     <p>
       Already have an account?
-      <a class="mt-4 text-center underline inline-flex hover:text-blue-600" href="/signin">Signin</a>
+      <a class="mt-4 text-center underline inline-flex hover:text-indigo-600" href="/signin">Signin</a>
     </p>
   </main>
 </Layout>
+<script>
+  import { handelFormSubmit } from "~/utils";
+
+  handelFormSubmit("signup");
+</script>

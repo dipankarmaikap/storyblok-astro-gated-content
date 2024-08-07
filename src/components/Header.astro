@@ -9,24 +9,37 @@ const user = Astro.locals.user;
     </span>
   </a>
   <nav class="flex gap-4">
-    <a class="hover:underline hover:text-blue-600" href="/">Home</a>
+    <a class="hover:underline hover:text-indigo-600" href="/">Home</a>
     {
       user ? (
         <>
-          <a class="hover:underline hover:text-blue-600" href="/profile">
+          <a class="hover:underline hover:text-indigo-600" href="/profile">
             Profile
           </a>
-          <form id="signout" method="post" hx-post="/api/signout">
-            <button class="hover:underline hover:text-blue-600" type="submit">
+          <form id="signout" method="post" action="/api/signout">
+            <button class="hover:underline hover:text-indigo-600" type="submit">
               Sign out
             </button>
           </form>
         </>
       ) : (
-        <a class="hover:underline hover:text-blue-600" href="/signin">
+        <a class="hover:underline hover:text-indigo-600" href="/signin">
           Signin
         </a>
       )
     }
   </nav>
 </header>
+<script>
+  const signoutForm = document.getElementById("signout");
+  signoutForm &&
+    signoutForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formElement = e.target as HTMLFormElement;
+      await fetch(formElement.action, {
+        method: formElement.method,
+        body: new FormData(formElement),
+      });
+      window.location.href = "/signin";
+    });
+</script>

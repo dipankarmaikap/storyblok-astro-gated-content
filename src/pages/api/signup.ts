@@ -1,74 +1,47 @@
 import type { APIContext } from "astro";
-import { db, eq, Password, User } from "astro:db";
-import { container, createSession, DBuuid, hashPassword, parseZodError } from "~/lib/helper";
-import { z } from "astro/zod";
-import SignupForm from "~/components/forms/SignupForm.astro";
+import { db, eq, User } from "astro:db";
+import { createSession, DBuuid, hashPassword, isValidPassword, isValidUsername, throwError } from "~/lib/helper";
 
-const SignupSchema = z.object({
-  email: z.string().email().min(1),
-  name: z.string().min(1),
-  password: z.string().min(1),
-});
 export async function POST(context: APIContext): Promise<Response> {
   const formData = await context.request.formData();
-  const data = Object.fromEntries(formData);
+  const name = formData.get("name");
+
+  //name validation
+  if (typeof name !== "string" || name.length < 3) {
+    return throwError("Invalid name");
+  }
+
+  const username = formData.get("username") as string;
+  const password = formData.get("password") as string;
+
+  // Basic validation
+  if (!isValidUsername(username) || !isValidPassword(password)) {
+    return throwError("Invalid username or password");
+  }
+
+  //Check if already have account then return error.
+  const [existingUser] = await db.select().from(User).where(eq(User.username, username));
+  if (existingUser) {
+    return throwError("Already have an account. Please login.");
+  }
+
+  const passwordHash = await hashPassword(password);
+  const userId = DBuuid();
+
   try {
-    const { email, name, password } = SignupSchema.parse(data);
-
-    const [existingUser] = await db.select().from(User).where(eq(User.email, email));
-
-    if (existingUser) {
-      const result = await container.renderToString(SignupForm, {
-        props: {
-          errors: { custom: "Already have an account. Please login." },
-        },
-      });
-      return new Response(result, {
-        headers: {
-          "Content-Type": "text/html",
-        },
-      });
-    }
-    const passwordHash = await hashPassword(password);
-    const userId = DBuuid();
     await db.insert(User).values({
       id: userId,
       name,
-      email,
-    });
-    await db.insert(Password).values({
-      id: userId,
-      hash: passwordHash,
+      username,
+      passwordHash,
     });
     await createSession(userId, context);
-    return new Response(null, {
-      headers: {
-        "HX-Location": "/",
-      },
-    });
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      const invalidInput = parseZodError(error);
-      const result = await container.renderToString(SignupForm, {
-        props: {
-          errors: invalidInput,
-        },
-      });
-      return new Response(result, {
-        headers: {
-          "Content-Type": "text/html",
-        },
-      });
-    }
-    const result = await container.renderToString(SignupForm, {
-      props: {
-        errors: { custom: "Something went wrong." },
-      },
-    });
-    return new Response(result, {
-      headers: {
-        "Content-Type": "text/html",
-      },
-    });
+    return new Response(
+      JSON.stringify({
+        sucess: true,
+      })
+    );
+  } catch (e) {
+    return throwError("An unknown error occurred", 500);
   }
 }

@@ -9,7 +9,3 @@ declare namespace App {
     user: import("lucia").User | null;
   }
 }
-interface Window {
-  htmx: any; // or you can use a more specific type if available
-  Alpine: import("alpinejs").Alpine;
-}

@@ -2,21 +2,7 @@ import { hash, verify } from "@node-rs/argon2";
 import { generateId } from "lucia";
 import { lucia } from "./auth";
 import type { APIContext } from "astro";
-import type { ActionAPIContext } from "astro/actions/runtime/store.js";
-import { experimental_AstroContainer } from "astro/container";
-import type { FormErrorType } from "~/types";
 
-export const container = await experimental_AstroContainer.create();
-
-export const parseZodError = (error: any) =>
-  error.errors.reduce((acc, err) => {
-    acc[err.path.join(".")] = err.message;
-    return acc;
-  }, {} as FormErrorType);
-
-export const delay = (delayInms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, delayInms));
-};
 export function DBuuid() {
   return generateId(15);
 }
@@ -34,7 +20,7 @@ export async function validatePassword(hashPassword: string, password: string) {
   return await verify(hashPassword, password, hashParameter);
 }
 
-export async function createSession(userId: string, context: APIContext | ActionAPIContext) {
+export async function createSession(userId: string, context: APIContext) {
   try {
     const oneHourFromNow = new Date();
     oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);
