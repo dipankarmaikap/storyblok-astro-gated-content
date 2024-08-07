@@ -1,5 +1,5 @@
 ---
-import { db, Comment, User, eq } from "astro:db";
+import { db, User, eq } from "astro:db";
 import Layout from "~/components/Layout.astro";
 
 const user = Astro.locals.user;
@@ -9,30 +9,17 @@ if (!user) {
 
 if (Astro.request.method === "POST") {
   const formData = await Astro.request.formData();
-  const formName = formData.get("form-name");
-  if (formName === "update-name") {
-    const name = formData.get("name");
-    if (typeof name === "string") {
-      await db
-        .update(User)
-        .set({
-          name,
-        })
-        .where(eq(User.id, user.id));
-    }
-    return Astro.redirect(Astro.url, 303);
+  const name = formData.get("name");
+  if (typeof name === "string") {
+    await db
+      .update(User)
+      .set({
+        name,
+      })
+      .where(eq(User.id, user.id));
   }
-
-  if (formName === "delete-comment") {
-    const commentId = formData.get("commentId");
-    if (typeof commentId === "string") {
-      await db.delete(Comment).where(eq(Comment.id, commentId));
-    }
-    return Astro.redirect(Astro.url, 303);
-  }
+  return Astro.redirect(Astro.url, 303);
 }
-
-const comments = await db.select().from(Comment).where(eq(Comment.userId, user.id));
 ---
 
 <Layout>
@@ -40,7 +27,6 @@ const comments = await db.select().from(Comment).where(eq(Comment.userId, user.i
     <h1 class="text-4xl font-bold mb-4">Profile</h1>
     <form method="post">
       <label for="name">Name</label>
-      <input type="hidden" name="form-name" value="update-name" />
       <input
         class="outline-none ring-2 rounded flex w-full ring-gray-400 p-2 focus:ring-indigo-600"
         name="name"
@@ -50,24 +36,5 @@ const comments = await db.select().from(Comment).where(eq(Comment.userId, user.i
       <br />
       <button class="rounded-md bg-indigo-600 text-white p-2 px-8 w-full" type="submit">Update profile</button>
     </form>
-    <div class="comments">
-      <p class="text-2xl font-bold my-6">All Comments[{comments.length}]</p>
-      <div class="flex flex-col gap-4">
-        {
-          comments.map((comment) => (
-            <article>
-              <p>{comment.body}</p>
-              <form method="post">
-                <input type="hidden" name="form-name" value="delete-comment" />
-                <input type="hidden" name="commentId" value={comment.id} />
-                <button class="bg-red-500 text-white rounded  px-1 mt-2" type="submit">
-                  Delete Comment
-                </button>
-              </form>
-            </article>
-          ))
-        }
-      </div>
-    </div>
   </main>
 </Layout>
